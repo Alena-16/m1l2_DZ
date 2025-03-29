@@ -1,0 +1,74 @@
+import telebot
+import os
+import requests
+import random
+bot = telebot.TeleBot("7973909015:AAEzHfJhZfUJGSAN5CX09rP8OWEwTctPV8s")
+images = os.listdir("images")
+
+# Обработчик команды '/start' и '/hello'
+@bot.message_handler(commands=['start', 'hello'])
+def send_welcome(message):
+    bot.reply_to(message, 'Привет! Я бот UtiALENAbot! Напиши /help')
+
+@bot.message_handler(commands=['help'])
+def send_welcome(message):
+    bot.reply_to(message, "Привет, напиши /duck, чтобы посмотреть уточек: /dog - посмотреть собачек, /fox - посмотреть лисичек, /pokemon - посмотреть покемонов")
+
+@bot.message_handler(commands=['mem'])
+def send_mem(message):
+    img_name = random.choice(images)
+    with open(f'images/{img_name}', 'rb') as f:  
+        bot.send_photo(message.chat.id, f)  
+
+def get_duck_image_url():    
+    url = 'https://random-d.uk/api/random'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+@bot.message_handler(commands=['duck'])
+def duck(message):
+    '''По команде duck вызывает функцию get_duck_image_url_1 и отправляет URL изображения утки'''
+    image_url = get_duck_image_url()
+    bot.reply_to(message, image_url)
+
+def get_dog_image_url():    
+    url = 'https://random.dog/woof.json'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+@bot.message_handler(commands=['dog'])
+def dog(message):
+    '''По команде dog вызывает функцию get_dog_image_url и отправляет URL изображения собачки'''
+    image_url = get_dog_image_url()
+    bot.reply_to(message, image_url)
+
+def get_fox_image_url():    
+    url = 'https://randomfox.ca/floof/'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+@bot.message_handler(commands=['fox'])
+def fox(message):
+    '''По команде fox вызывает функцию get_fox_image_url и отправляет URL изображения лисички'''
+    image_url = get_fox_image_url()
+    bot.reply_to(message, image_url)
+
+def get_pokemon_image_url():    
+    url = 'https://pokeapi.co'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+@bot.message_handler(commands=['pokemon'])
+def pokemon(message):
+    '''По команде pokemon вызывает функцию get_pokemon_image_url и отправляет URL изображения покемона'''
+    image_url = get_pokemon_image_url()
+    bot.reply_to(message, image_url)
+
+if __name__ == "__main__":
+    bot.polling(none_stop=True)
+
+bot.infinity_polling()
