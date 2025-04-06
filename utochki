@@ -2,7 +2,7 @@ import telebot
 import os
 import requests
 import random
-bot = telebot.TeleBot("7973909015:AAEzHfJhZfUJGSAN5CX09rP8OWEwTctPV8s")
+bot = telebot.TeleBot("ТОКЕН")
 images = os.listdir("images")
 
 # Обработчик команды '/start' и '/hello'
